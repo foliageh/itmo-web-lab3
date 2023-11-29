@@ -8,8 +8,14 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Lab work #3</title>
+    <h:outputStylesheet name="styles/primeflex.min.css" role=""/>
+    <h:outputScript name="scripts/plot.js" target="body"/>
 </h:head>
+<p:growl id="msgs" showDetail="true" skipDetailIfEqualsSummary="true"/>
 <h:body>
+    <div class="plot">
+        <canvas id="plot__canvas" width="300" height="300"/>
+    </div>
     <h:form id="shot_form">
         <h:panelGrid columns="1">
             <p:outputLabel for="x" value="X:" indicateRequired="false"/>
@@ -18,32 +24,40 @@
             </p:inputText>
             <br/>
             <p:outputLabel for="y" value="Y:" indicateRequired="false"/>
-            <h:outputText id="y_output" value="#{shotManager.shot.y}" />
+            <h:outputText id="y_output" value="#{shotManager.shot.y}"/>
             <h:inputHidden id="y" value="#{shotManager.shot.y}" required="true"/>
             <p:slider for="y" minValue="-2" maxValue="2" step="0.5" display="y_output" displayTemplate="{value}"/>
             <br/>
             <p:outputLabel for="r" value="R:" indicateRequired="false"/>
-            <p:selectManyCheckbox id="r" value="#{shotManager.selectedR}" required="true">
+            <p:selectManyCheckbox id="r" value="#{shotManager.selectedR}" required="true" flex="true">
                 <f:selectItems value="#{shotManager.availableR}" var="r" itemLabel="#{r}" itemValue="#{r}"/>
+                <p:ajax event="change" oncomplete="rChanged()"/>
             </p:selectManyCheckbox>
             <br/>
-            <p:commandButton value="Shoot" actionListener="#{shotManager.shoot()}" update=":table msgs"/>
-            <p:messages id="msgs"/>
+            <p:commandButton value="Shoot"
+                             actionListener="#{shotManager.shoot()}"
+                             oncomplete="drawPlot()"
+                             update=":shot_table :msgs"/>
+            <p:remoteCommand name="shoot"
+                             actionListener="#{shotManager.shootPlot()}"
+                             immediate="true"
+                             oncomplete="drawPlot()"
+                             update="shot_table :msgs"/>
         </h:panelGrid>
     </h:form>
     <br/>
-    <p:dataTable id="table" value="#{shotManager.shots}" var="shot" sortMode="single">
+    <p:dataTable id="shot_table" value="#{shotManager.shots}" var="shot" sortMode="single">
         <p:column headerText="Id" sortBy="#{shot.id}" sortOrder="desc">
             <h:outputText value="#{shot.id}"/>
         </p:column>
         <p:column headerText="Shot">
-            <h:outputText value="(#{shot.x}, #{shot.y}, #{shot.r})"/>
+            <h:outputText value="(#{shot.x}; #{shot.y}; #{shot.r})"/>
         </p:column>
         <p:column headerText="Time">
             <h:outputText value="#{shot.shotTime}"/>
         </p:column>
         <p:column headerText="Result">
-            <h:outputText value="#{shot.inArea}"/>
+            <h:outputText value="#{shot.inArea ? 'In' : 'Out'}"/>
         </p:column>
     </p:dataTable>
     <br/>
