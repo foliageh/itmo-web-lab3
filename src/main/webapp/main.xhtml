@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Lab work #3</title>
+</h:head>
+<h:body>
+    <h:form id="shot_form">
+        <h:panelGrid columns="1">
+            <p:outputLabel for="x" value="X:" indicateRequired="false"/>
+            <p:inputText id="x" value="#{shotManager.shot.x}" required="true">
+                <f:validateDoubleRange minimum="-5" maximum="3"/>
+            </p:inputText>
+            <br/>
+            <p:outputLabel for="y" value="Y:" indicateRequired="false"/>
+            <h:outputText id="y_output" value="#{shotManager.shot.y}" />
+            <h:inputHidden id="y" value="#{shotManager.shot.y}" required="true"/>
+            <p:slider for="y" minValue="-2" maxValue="2" step="0.5" display="y_output" displayTemplate="{value}"/>
+            <br/>
+            <p:outputLabel for="r" value="R:" indicateRequired="false"/>
+            <p:selectManyCheckbox id="r" value="#{shotManager.selectedR}" required="true">
+                <f:selectItems value="#{shotManager.availableR}" var="r" itemLabel="#{r}" itemValue="#{r}"/>
+            </p:selectManyCheckbox>
+            <br/>
+            <p:commandButton value="Shoot" actionListener="#{shotManager.shoot()}" update=":table msgs"/>
+            <p:messages id="msgs"/>
+        </h:panelGrid>
+    </h:form>
+    <br/>
+    <p:dataTable id="table" value="#{shotManager.shots}" var="shot" sortMode="single">
+        <p:column headerText="Id" sortBy="#{shot.id}" sortOrder="desc">
+            <h:outputText value="#{shot.id}"/>
+        </p:column>
+        <p:column headerText="Shot">
+            <h:outputText value="(#{shot.x}, #{shot.y}, #{shot.r})"/>
+        </p:column>
+        <p:column headerText="Time">
+            <h:outputText value="#{shot.shotTime}"/>
+        </p:column>
+        <p:column headerText="Result">
+            <h:outputText value="#{shot.inArea}"/>
+        </p:column>
+    </p:dataTable>
+    <br/>
+    <p:link outcome="/index" value="INDEX"/>
+</h:body>
+</html>
