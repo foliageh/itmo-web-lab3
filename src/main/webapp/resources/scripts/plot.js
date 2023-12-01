@@ -48,7 +48,7 @@ function drawPlot() {
 
     const fontSize = 15
     ctx.font = `${fontSize}px monospace`
-    ctx.fillStyle = '#3399fe'
+    ctx.fillStyle = '#34a1ff'
     ctx.strokeStyle = 'black'
 
     ctx.clearRect(0, 0, canvas.width, canvas.height)

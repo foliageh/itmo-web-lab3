@@ -14,6 +14,7 @@ import web.twillice.lab3.util.MessageManager;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Named @SessionScoped
 public class ShotManager implements Serializable {
@@ -30,19 +31,18 @@ public class ShotManager implements Serializable {
 
     @PostConstruct
     public void init() {
-        shot.setY(0.0);
+        shot.setY(-2.0);
     }
 
     public void shoot() {
         for (Double r : selectedR) {
             shot.setR(r);
-            Shot newShot = repository.create(shot);
-            shots.add(newShot);
+            saveShot(shot);
         }
     }
 
     public void shootPlot() {
-        var requestParameters = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+        Map<String, String> requestParameters = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         String error = requestParameters.get("error");
         if (error != null) {
             MessageManager.error(error);
@@ -53,10 +53,14 @@ public class ShotManager implements Serializable {
             shot.setX(Double.parseDouble(requestParameters.get("x")));
             shot.setY(Double.parseDouble(requestParameters.get("y")));
             shot.setR(Double.parseDouble(requestParameters.get("r")));
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException | NullPointerException e) {
             MessageManager.error("Invalid values.");
             return;
         }
+        saveShot(shot);
+    }
+
+    private void saveShot(Shot shot) {
         Shot newShot = repository.create(shot);
         shots.add(newShot);
     }

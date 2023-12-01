@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>#{title}</title>
+    <h:outputStylesheet name="styles/common.css"/>
+    <ui:insert name="styles"/>
+    <ui:insert name="scripts"/>
+</h:head>
+<p:growl id="msgs" showDetail="true" skipDetailIfEqualsSummary="true"/>
+<h:body>
+    <header>
+        <ui:include src="/WEB-INF/includes/layout/header.xhtml"/>
+    </header>
+    <main>
+        <ui:insert name="content"/>
+    </main>
+</h:body>
+</html>

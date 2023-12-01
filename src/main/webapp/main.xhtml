@@ -1,66 +1,80 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="jakarta.faces.html"
-      xmlns:f="jakarta.faces.core"
-      xmlns:p="http://primefaces.org/ui">
-<h:head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Lab work #3</title>
-    <h:outputStylesheet name="styles/primeflex.min.css" role=""/>
-    <h:outputScript name="scripts/plot.js" target="body"/>
-</h:head>
-<p:growl id="msgs" showDetail="true" skipDetailIfEqualsSummary="true"/>
-<h:body>
-    <div class="plot">
-        <canvas id="plot__canvas" width="300" height="300"/>
-    </div>
-    <h:form id="shot_form">
-        <h:panelGrid columns="1">
-            <p:outputLabel for="x" value="X:" indicateRequired="false"/>
-            <p:inputText id="x" value="#{shotManager.shot.x}" required="true">
-                <f:validateDoubleRange minimum="-5" maximum="3"/>
-            </p:inputText>
-            <br/>
-            <p:outputLabel for="y" value="Y:" indicateRequired="false"/>
-            <h:outputText id="y_output" value="#{shotManager.shot.y}"/>
-            <h:inputHidden id="y" value="#{shotManager.shot.y}" required="true"/>
-            <p:slider for="y" minValue="-2" maxValue="2" step="0.5" display="y_output" displayTemplate="{value}"/>
-            <br/>
-            <p:outputLabel for="r" value="R:" indicateRequired="false"/>
-            <p:selectManyCheckbox id="r" value="#{shotManager.selectedR}" required="true" flex="true">
-                <f:selectItems value="#{shotManager.availableR}" var="r" itemLabel="#{r}" itemValue="#{r}"/>
-                <p:ajax event="change" oncomplete="rChanged()"/>
-            </p:selectManyCheckbox>
-            <br/>
-            <p:commandButton value="Shoot"
-                             actionListener="#{shotManager.shoot()}"
-                             oncomplete="drawPlot()"
-                             update=":shot_table :msgs"/>
-            <p:remoteCommand name="shoot"
-                             actionListener="#{shotManager.shootPlot()}"
-                             immediate="true"
-                             oncomplete="drawPlot()"
-                             update="shot_table :msgs"/>
-        </h:panelGrid>
-    </h:form>
-    <br/>
-    <p:dataTable id="shot_table" value="#{shotManager.shots}" var="shot" sortMode="single">
-        <p:column headerText="Id" sortBy="#{shot.id}" sortOrder="desc">
-            <h:outputText value="#{shot.id}"/>
-        </p:column>
-        <p:column headerText="Shot">
-            <h:outputText value="(#{shot.x}; #{shot.y}; #{shot.r})"/>
-        </p:column>
-        <p:column headerText="Time">
-            <h:outputText value="#{shot.shotTime}"/>
-        </p:column>
-        <p:column headerText="Result">
-            <h:outputText value="#{shot.inArea ? 'In' : 'Out'}"/>
-        </p:column>
-    </p:dataTable>
-    <br/>
-    <p:link outcome="/index" value="INDEX"/>
-</h:body>
-</html>
+<ui:composition template="/WEB-INF/templates/layout.xhtml"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:pt="jakarta.faces.passthrough"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:param name="title" value="Lab work #3 - Main page"/>
+    <ui:define name="styles">
+        <h:outputStylesheet name="styles/main.css"/>
+    </ui:define>
+    <ui:define name="scripts">
+        <h:outputScript name="scripts/plot.js" target="body"/>
+    </ui:define>
+    <ui:define name="content">
+        <div class="main">
+            <div class="control">
+                <div class="plot">
+                    <canvas id="plot__canvas" width="300" height="300"/>
+                </div>
+                <h:form id="shot_form">
+                    <div class="input-block">
+                        <p:outputLabel for="x" value="X:" styleClass="input-label" indicateRequired="false"/>
+                        <div class="input-group">
+                            <p:inputText id="x" value="#{shotManager.shot.x}" required="true"
+                                         styleClass="text-input" pt:placeholder="from -5.0 to 3.0"
+                                         pt:pattern="(?:-5|\+?3)(?:[.,]0{1,15})?|(?:-[43210]|\+?[012])(?:[.,]\d{1,15})?"
+                                         converter="XCoordinateConverter"/>
+                        </div>
+                    </div>
+                    <div class="input-block">
+                        <p:outputLabel for="y" value="Y:" styleClass="input-label" indicateRequired="false"/>
+                        <div class="input-group" style="display: block">
+                            <h:outputText id="y_output" value="#{shotManager.shot.y}"/>
+                            <h:inputHidden id="y" value="#{shotManager.shot.y}" required="true"/>
+                            <p:slider for="y" minValue="-2" maxValue="2" step="0.5"
+                                      display="y_output" displayTemplate="{value}"/>
+                        </div>
+                    </div>
+                    <div class="input-block">
+                        <p:outputLabel for="r" value="R:" styleClass="input-label" indicateRequired="false"/>
+                        <div class="input-group">
+                            <p:selectManyCheckbox id="r" value="#{shotManager.selectedR}" flex="true" required="true">
+                                <f:selectItems value="#{shotManager.availableR}" var="r"
+                                               itemLabel="#{r}" itemValue="#{r}"/>
+                                <p:ajax event="change" oncomplete="rChanged()"/>
+                            </p:selectManyCheckbox>
+                        </div>
+                    </div>
+                    <p:commandButton value="Shoot"
+                                     styleClass="button"
+                                     actionListener="#{shotManager.shoot()}"
+                                     oncomplete="drawPlot()"
+                                     update=":shot_table :msgs"/>
+                    <p:remoteCommand name="shoot"
+                                     actionListener="#{shotManager.shootPlot()}"
+                                     immediate="true"
+                                     oncomplete="drawPlot()"
+                                     update=":shot_table :msgs"/>
+                </h:form>
+                <p:link outcome="/index" value="INDEX" style="margin-top: -20px;"/>
+            </div>
+            <div class="table">
+                <p:dataTable id="shot_table" value="#{shotManager.shots}" var="shot" sortMode="single">
+                    <p:column headerText="Id" width="50" sortBy="#{shot.id}" sortOrder="desc">
+                        <h:outputText value="#{shot.id}"/>
+                    </p:column>
+                    <p:column headerText="Shot" width="220">
+                        <h:outputText value="(#{shot.x}; #{shot.y}; #{shot.r})"/>
+                    </p:column>
+                    <p:column headerText="Time">
+                        <h:outputText value="#{shot.shotTime}"/>
+                    </p:column>
+                    <p:column headerText="Result">
+                        <h:outputText value="#{shot.inArea ? 'In' : 'Out'}"/>
+                    </p:column>
+                </p:dataTable>
+            </div>
+        </div>
+    </ui:define>
+</ui:composition>

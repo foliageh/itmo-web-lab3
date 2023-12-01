@@ -1,21 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="jakarta.faces.html"
-      xmlns:p="http://primefaces.org/ui">
-<h:head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Lab work #3</title>
-</h:head>
-<h:body>
-    <header>
-        <h2>Muratov Mikhail Alexandrovich, P3209</h2>
-        <h2>Variant 95733</h2>
-    </header>
-    <h:outputText id="clock" value="#{indexView.currentTime}"/>
-    <p:poll interval="13" listener="#{indexView.updateTime()}" update="clock"/>
-    <br/>
-    <p:link outcome="/main" value="MAIN"/>
-</h:body>
-</html>
+<ui:composition template="/WEB-INF/templates/layout.xhtml"
+                xmlns:h="jakarta.faces.html"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:param name="title" value="Lab work #3 - Home page"/>
+    <ui:define name="content">
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 20px">
+            <h:outputText id="clock" style="font-size: 60px" value="#{indexView.currentTime}"/>
+            <p:poll interval="13" listener="#{indexView.updateTime()}" update="clock"/>
+            <p:link outcome="/main" value="MAIN"/>
+        </div>
+    </ui:define>
+</ui:composition>
