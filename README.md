@@ -1,10 +1,15 @@
 # Lab work #3
-???
+**Implementation of web application from [lab work #2](https://github.com/foliageh/itmo-web-lab2) using Jakarta EE 10 Faces + Hibernate.**  
+Jakarta EE 10, JSF, Hibernate (PostgreSQL), PrimeFaces, Lombok, WildFly, JavaScript.
+
+> [How to create, launch and deploy to Helios?](#create-launch--deploy)
+
+![image](https://github.com/foliageh/itmo-web-lab3/assets/46216950/e693c4be-89e6-4e86-a282-1e0d9249d0fe)
 
 ## Task
 Разработать приложение на базе JavaServer Faces Framework, которое осуществляет проверку попадания точки в заданную область на координатной плоскости.
 
-![task](???)
+![task](https://github.com/foliageh/itmo-web-lab3/assets/46216950/91415f9b-f89d-4500-ac74-8b200cbf12a0)
 
 Приложение должно включать в себя 2 facelets-шаблона - стартовую страницу и основную страницу приложения, а также набор управляемых бинов (managed beans), реализующих логику на стороне сервера.
 
@@ -55,9 +60,9 @@ _in progress_
 2. В открывшемся окне выбираем `Jakarta EE 10`. Также можно отметить галочками JSF, Servlet и Hibernate, 
 но это не особо важно, все равно потом мы укажем зависимости самостоятельно. Нажимаем `Create`.
 3. Проект создался. Сгенерированный IDEA сервлет и JSP-страницу удаляем, они нам не нужны. 
-Вместо них добавим файлы [webapp/WEB-INF/faces-config.xml](???) и [webapp/WEB-INF/beans.xml](???).
-4. Изменим автоматически сгенерированное содержимое `pom.xml` в соответствии с [примером](???).
-5. Также изменим в соответствии с [примером](???) содержимое `web.xml`. 
+Вместо них добавим файлы [webapp/WEB-INF/faces-config.xml](src/main/webapp/WEB-INF/faces-config.xml) и [webapp/WEB-INF/beans.xml](src/main/webapp/WEB-INF/beans.xml).
+4. Изменим автоматически сгенерированное содержимое `pom.xml` в соответствии с [примером](pom.xml).
+5. Также изменим в соответствии с [примером](src/main/webapp/WEB-INF/web.xml) содержимое `webapp/WEB-INF/web.xml`. 
 Я добавил в конфигурацию несколько необязательных, но очень полезных параметров, рекомендую их оставить. 
 6. Congratulations, наконец мы можем начать писать код!
 Для сборки выполняем `mvn clean install` (удобно это сделать прямо в IDEA, из панели справа), 
@@ -67,20 +72,23 @@ _in progress_
 Будем использовать PostgreSQL и Hibernate, причем к БД подключимся удаленно на Helios. 
 Для PostgreSQL, установленного локально, все аналогично. Если вы хотите использовать другую СУБД или ORM,
 шаги не будут сильно отличаться, но для нюансов скорее всего понадобится заглянуть в документацию вашей СУБД или провайдера JPA.
-1. Для начала нужно немного настроить WildFly. В cmd введем несколько несложных команд. 
-Не забудьте изменить `<your-username>` и `<your-password>` на свои логин и пароль от БД.
+1. Для начала нужно немного настроить WildFly. В cmd введем несколько несложных команд.
+Файл `postgresql-module.xml`, путь к которому надо указать в первой команде, можно взять [отсюда](extensions/postgresql-module.xml).
+И не забудьте изменить `<your-username>` и `<your-password>` на свои логин и пароль от БД.
+
     ```shell
     jboss-cli.bat "embed-server, module add --name=org.postgresql.jdbc --module-xml=postgresql-module.xml"
     jboss-cli.bat "embed-server --server-config=standalone.xml, /subsystem=datasources/jdbc-driver=postgresql:add(driver-name=postgresql,driver-module-name=org.postgresql.jdbc,driver-xa-datasource-class-name=org.postgresql.xa.PGXADataSource)"
     jboss-cli.bat "embed-server --server-config=standalone.xml, xa-data-source add --name=PostgresDS --driver-name=postgresql --jndi-name=java:jboss/datasources/PostgresDS --user-name=<your-username> --password=<your-password> --xa-datasource-properties=ServerName=localhost, /subsystem=datasources/xa-data-source=PostgresDS/xa-datasource-properties=PortNumber:add(value=5432), /subsystem=datasources/xa-data-source=PostgresDS/xa-datasource-properties=DatabaseName:add(value=studs)"
     ```
-2. Добавим в проект файл [resources/META-INF/persistence.xml](???). Не забудьте поменять логин и пароль.
-3. Пробросим порты от PostgreSQL с Helios на локальный компьютер, чтобы взаимодействовать с СУБД так, 
-будто она установлена локально. Например, через [PuTTY](https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html): 
+3. Добавим в проект файл [resources/META-INF/persistence.xml](src/main/resources/META-INF/persistence.xml). Не забудьте поменять логин и пароль.
+4. Пробросим порты от PostgreSQL с Helios на локальный компьютер, чтобы взаимодействовать с СУБД так, 
+будто она установлена локально. Например, через [PuTTY](https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html):
+
     ```shell
     plink.exe -batch -ssh sXXXXXX@se.ifmo.ru -pw password -P 2222 -L 5432:pg:5432
     ```
-4. Ура, теперь мы можем написать полноценное приложение с б~~лэкджеком~~ базой данных и запускать его на своем компьютере! 
+6. Ура, теперь мы можем написать полноценное приложение с б~~лэкджеком~~ базой данных и запускать его на своем компьютере! 
 Остался последний шаг - деплой на Helios.
 
 ### Деплой на Helios
@@ -88,18 +96,21 @@ _in progress_
 закинем в свою домашнюю директорию на Helios и выполним команду `unzip -qq wildfly-30.0.0.Final.zip`.
 2. Отредактируем файл `wildfly-30.0.0.Final\standalone\configuration\standalone.xml`. 
 - Изменить
+  
   ``` xml
   <interface name="public">
       <inet-address value="${jboss.bind.address:127.0.0.1}" />
   </interface>
   ```
   на
+  
   ``` xml
   <interface name="public">
       <any-address/>
   </interface>
   ```  
 - И изменить порты в соответствии со своим portbase следующим образом:
+  
   ``` xml
   <socket-binding name="ajp" port="${jboss.ajp.port:8009}"/>
   <socket-binding name="http" port="${jboss.http.port:8080}"/>
@@ -108,6 +119,7 @@ _in progress_
   <socket-binding name="management-https" interface="management" port="${jboss.management.https.port:9993}"/>
   ```  
   изменяем на (для примера положим portbase=22288)
+  
   ``` xml
   <socket-binding name="ajp" port="${jboss.ajp.port:22289}"/>
   <socket-binding name="http" port="${jboss.http.port:22288}"/>
@@ -115,7 +127,8 @@ _in progress_
   <socket-binding name="management-http" interface="management" port="${jboss.management.http.port:22291}"/>
   <socket-binding name="management-https" interface="management" port="${jboss.management.https.port:22292}"/>
   ``` 
-3. Наконец введем знакомые команды (снова не забыв изменить username и password):
+3. Наконец введем знакомые команды, не забыв поменять username, password и путь к [postgresql-module.xml](extensions/postgresql-module.xml):
+   
     ```shell
     bash ~/wildfly-30.0.0.Final/bin/jboss-cli.sh "embed-server, module add --name=org.postgresql.jdbc --module-xml=postgresql-module.xml"
     bash ~/wildfly-30.0.0.Final/bin/jboss-cli.sh "embed-server --server-config=standalone.xml, /subsystem=datasources/jdbc-driver=postgresql:add(driver-name=postgresql,driver-module-name=org.postgresql.jdbc,driver-xa-datasource-class-name=org.postgresql.xa.PGXADataSource)"
@@ -125,8 +138,8 @@ _in progress_
 1. Собрать написанное приложение через `mvn clean install`. В папке проекта `target/` появился файл `lab3.war`.
 Закинем его на Helios в папку `~/wildfly-30.0.0.Final/standalone/deployments/`.
 2. Запустим сервер командой `bash ~/wildfly-21.0.0.Final/bin/standalone.sh`.
-   Если серверу будет не хватать памяти для запуска, на helios можно выполнить команду `killall -u sXXXXXX`, например.
-3. Прокинем порты с helios на локалку, например, командой `plink.exe -batch -ssh sXXXXXX@se.ifmo.ru -pw password -P 2222 -L 22288:helios.cs.ifmo.ru:22288`.
+   Если серверу будет не хватать памяти для запуска, на Helios можно выполнить команду `killall -u sXXXXXX`, например.
+3. Прокинем порты с Helios на локалку, например, командой `plink.exe -batch -ssh sXXXXXX@se.ifmo.ru -pw password -P 2222 -L 22288:helios.cs.ifmo.ru:22288`.
 4. Введем в браузере http://localhost:22288/lab3.
 5. ???
 6. Ураааа, всё работает!) 🎉🎉🎉
