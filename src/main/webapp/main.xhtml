@@ -60,7 +60,11 @@
                 <p:link outcome="/index" value="INDEX" style="margin-top: -20px;"/>
             </div>
             <div class="table">
-                <p:dataTable id="shot_table" value="#{shotManager.shots}" var="shot" sortMode="single">
+                <p:dataTable id="shot_table" value="#{shotManager.shots}" var="shot" sortMode="single"
+                             paginator="true" paginatorPosition="bottom" paginatorAlwaysVisible="false"
+                             rows="10" rowsPerPageTemplate="5,10,15"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records">
                     <p:column headerText="Id" width="50" sortBy="#{shot.id}" sortOrder="desc">
                         <h:outputText value="#{shot.id}"/>
                     </p:column>

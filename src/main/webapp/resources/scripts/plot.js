@@ -54,19 +54,19 @@ function drawPlot() {
     ctx.clearRect(0, 0, canvas.width, canvas.height)
 
     // rectangle
-    ctx.fillRect(transformX(-R / 2), transformY(0), (R / 2) * scale, R * scale)
+    ctx.fillRect(transformX(0), transformY(R / 2), R * scale, (R / 2) * scale)
 
     // triangle
     ctx.beginPath()
-    ctx.moveTo(transformX(-R / 2), transformY(0))
+    ctx.moveTo(transformX(0), transformY(-R / 2))
     ctx.lineTo(transformX(0), transformY(0))
-    ctx.lineTo(transformX(0), transformY(R))
+    ctx.lineTo(transformX(R / 2), transformY(0))
     ctx.closePath()
     ctx.fill()
 
     // semicircle
     ctx.beginPath()
-    ctx.arc(transformX(0), transformY(0), R * scale, -Math.PI / 2, 0, false)
+    ctx.arc(transformX(0), transformY(0), R * scale, Math.PI, -Math.PI / 2, false)
     ctx.lineTo(transformX(0), transformY(0))
     ctx.closePath()
     ctx.fill()

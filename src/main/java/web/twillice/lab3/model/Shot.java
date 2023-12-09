@@ -40,9 +40,9 @@ public class Shot implements Serializable {
     }
 
     private boolean checkHit() {
-        boolean area1_hit = x <= 0 && y <= 0 && x >= -r / 2 && y >= -r;
-        boolean area2_hit = x <= 0 && y >= 0 && y <= 2 * (x + r / 2);
-        boolean area3_hit = x >= 0 && y >= 0 && x * x + y * y <= r * r;
+        boolean area1_hit = x >= 0 && y >= 0 && x <= r && y <= r / 2;
+        boolean area2_hit = x >= 0 && y <= 0 && y >= x - r / 2;
+        boolean area3_hit = x <= 0 && y >= 0 && x * x + y * y <= r * r;
         return area1_hit || area2_hit || area3_hit;
     }
 }
