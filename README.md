@@ -1,6 +1,6 @@
 # Lab work #3
 **Implementation of web application from [lab work #2](https://github.com/foliageh/itmo-web-lab2) using Jakarta EE 10 Faces + Hibernate.**  
-Jakarta EE 10, JSF, Hibernate (PostgreSQL), PrimeFaces, Lombok, WildFly, JavaScript.
+Jakarta EE 10 (JSF, CDI, JTA, JPA, EJB), Hibernate (PostgreSQL), PrimeFaces, Lombok, WildFly, JavaScript.
 
 > [How to create, launch and deploy to Helios?](#create-launch--deploy)
 
