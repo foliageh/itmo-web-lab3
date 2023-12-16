@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<facelet-taglib version="4.0" xmlns="https://jakarta.ee/xml/ns/jakartaee"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-facelettaglibrary_4_0.xsd">
+    <namespace>twillice.tags</namespace>
+    <short-name>tw</short-name>
+    <tag>
+        <description>Replaces the word "duck" found in the tag content with a duck gif.</description>
+        <tag-name>ducky</tag-name>
+        <component>
+            <component-type>twillice.Ducky</component-type>
+        </component>
+        <attribute>
+            <name>id</name>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>ducksShown</name>
+            <type>java.lang.Boolean</type>
+        </attribute>
+        <attribute>
+            <name>minValue</name>
+            <type>java.lang.Integer</type>
+        </attribute>
+    </tag>
+</facelet-taglib>

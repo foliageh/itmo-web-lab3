@@ -8,6 +8,7 @@
             <h:outputText id="clock" style="font-size: 60px" value="#{indexView.currentTime}"/>
             <p:poll interval="13" listener="#{indexView.updateTime()}" update="clock"/>
             <p:link outcome="/main" value="MAIN"/>
+            <p:link outcome="/additional-task" value="ADDITIONAL TASK"/>
         </div>
     </ui:define>
 </ui:composition>

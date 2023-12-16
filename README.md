@@ -1,6 +1,6 @@
 # Lab work #3
 **Implementation of web application from [lab work #2](https://github.com/foliageh/itmo-web-lab2) using Jakarta EE 10 Faces + Hibernate.**  
-Jakarta EE 10 (JSF, CDI, JTA, JPA, EJB), Hibernate (PostgreSQL), PrimeFaces, Lombok, WildFly, JavaScript.
+Jakarta EE 10 (JSF, CDI, JPA, EJB), Hibernate (PostgreSQL), PrimeFaces, Lombok, WildFly, JavaScript.
 
 > [How to create, launch and deploy to Helios?](#create-launch--deploy)
 
@@ -30,7 +30,13 @@ Jakarta EE 10 (JSF, CDI, JTA, JPA, EJB), Hibernate (PostgreSQL), PrimeFaces, Lom
 - Для управления списком результатов должен использоваться Session-scoped Managed Bean.
 
 ## Additional Task
-_in progress_
+Создать кастомный тэг **ducky**, который будет заменять вхождения в содержимое тэга слова _duck_ на гифку с уткой.
+
+Тэг должен иметь следующие атрибуты:
+1. **ducksShown**: boolean; определяет, будет ли производиться замена.
+2. **minValue**: int; определяет, какое минимальное количество "уток" должно быть в тексте, чтобы производилась замена.
+
+Создать страницу, которая будет содержать этот тэг с текстом, а также элементы управления его атрибутами.
 
 ## Create, Launch & Deploy
 В этом гайде пошагово разберем, как настроить Jakarta EE 10, WildFly и Hibernate для сборки и запуска проекта,
@@ -83,7 +89,7 @@ _in progress_
     ```
 3. Добавим в проект файл [resources/META-INF/persistence.xml](src/main/resources/META-INF/persistence.xml). Не забудьте поменять логин и пароль.
 4. Пробросим порты от PostgreSQL с Helios на локальный компьютер, чтобы взаимодействовать с СУБД так, 
-будто она установлена локально. Например, через [PuTTY](https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html):
+будто она установлена локально. Например, через [PuTTY](https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html). Порт 5432 на локалке должен быть открыт.
 
     ```shell
     plink.exe -batch -ssh sXXXXXX@se.ifmo.ru -pw password -P 2222 -L 5432:pg:5432
